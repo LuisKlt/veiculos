@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once 'includes/db.php';
 
 $modelo = $_GET['modelo'] ?? '';
@@ -36,8 +38,24 @@ $categorias = $pdo->query("SELECT * FROM categorias")->fetchAll(PDO::FETCH_ASSOC
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h1 class="mb-0 text-white"><span>Lima</span>Veículos</h1>
+    
+    <div class="d-flex gap-2">
+      <?php if (isset($_SESSION['usuario_id'])): ?>
+        <a class="btn btn-outline-light" href="cadastrar_usuario.php">Cadastrar Usuário</a>
+        <a class="btn btn-danger" href="logout.php">Sair</a>
+      <?php else: ?>
+        <a class="btn btn-success" href="login.php">Entrar</a>
+      <?php endif; ?>
+    </div>
+  </div>
+</nav>
+
 <div class="container py-4">
-    <h1 class="mb-4"><span>Lima</span>Veículos</h1>
+    
 
     <form method="GET" class="row g-2 mb-4">
         <div class="col-sm-4">

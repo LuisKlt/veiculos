@@ -1,6 +1,12 @@
 <?php
 require_once 'includes/db.php';
 
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $modelo = $_POST['modelo'];
     $marca = $_POST['marca'];
@@ -19,9 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$modelo, $marca, $ano, $placa, $cor, $id_categoria, $imagem]);
 
     header("Location: index.php");
+
+    
 }
 
 $categorias = $pdo->query("SELECT * FROM categorias")->fetchAll();
+
+$veiculos = $pdo->query("
+    SELECT v.*, c.nome AS categoria 
+    FROM veiculos v 
+    LEFT JOIN categorias c ON v.id_categoria = c.id
+    ORDER BY v.id DESC
+")->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +46,7 @@ $categorias = $pdo->query("SELECT * FROM categorias")->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cadastrar Veículo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <div class="container my-5">
@@ -79,7 +95,7 @@ $categorias = $pdo->query("SELECT * FROM categorias")->fetchAll();
 
         <div class="col-md-6">
             <label for="imagem" class="form-label">Imagem do Veículo</label>
-            <input class="form-control" type="file" id="imagem" name="imagem" required accept="image/*">
+            <input class="form-control custom-placeholder" type="file" id="imagem" name="imagem" required accept="image/*">
             <div class="invalid-feedback">Por favor, envie uma imagem.</div>
         </div>
 
@@ -88,6 +104,51 @@ $categorias = $pdo->query("SELECT * FROM categorias")->fetchAll();
             <a href="index.php" class="btn btn-secondary ms-2">Cancelar</a>
         </div>
     </form>
+    <?php if ($veiculos): ?>
+    <h2 class="mt-5">Veículos Cadastrados</h2>
+    <div class="table-responsive">
+        <table class="table table-dark table-striped table-bordered align-middle mt-3">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Modelo</th>
+                    <th>Marca</th>
+                    <th>Ano</th>
+                    <th>Placa</th>
+                    <th>Cor</th>
+                    <th>Categoria</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($veiculos as $v): ?>
+                    <tr>
+                        <td>
+                            <?php if ($v['imagem']): ?>
+                                <img src="<?= htmlspecialchars($v['imagem']) ?>" alt="Imagem" width="100">
+                            <?php else: ?>
+                                Sem imagem
+                            <?php endif; ?>
+                        </td>
+                        <td><?= htmlspecialchars($v['modelo']) ?></td>
+                        <td><?= htmlspecialchars($v['marca']) ?></td>
+                        <td><?= htmlspecialchars($v['ano']) ?></td>
+                        <td><?= htmlspecialchars($v['placa']) ?></td>
+                        <td><?= htmlspecialchars($v['cor']) ?></td>
+                        <td><?= htmlspecialchars($v['categoria']) ?></td>
+                        <td>
+                            <a href="editar_veiculo.php?id=<?= $v['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="excluir_veiculo.php?id=<?= $v['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este veículo?')">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php else: ?>
+    <p class="mt-5">Nenhum veículo cadastrado.</p>
+<?php endif; ?>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

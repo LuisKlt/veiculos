@@ -32,6 +32,18 @@ try {
         FOREIGN KEY (id_categoria) REFERENCES categorias(id) ON DELETE SET NULL
     )");
 
+    $stmt = $pdo->query("SELECT COUNT(*) as total FROM usuarios");
+    $total = $stmt->fetch()['total'];
+
+    if ($total == 0) {
+        $nome = 'Admin';
+        $email = 'admin@gmail.com';
+        $senhaHash = '$2y$10$gnkqG9fa6W2jyrddC.QiCuqWxaLWHnZIfGcH49ICwdFxtV5RSVRna';
+
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)");
+        $stmt->execute([$nome, $email, $senhaHash]);
+    }
+
 } catch (PDOException $e) {
     die("Erro de conexão: " . $e->getMessage());
 }

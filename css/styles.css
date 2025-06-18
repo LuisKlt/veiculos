@@ -1,18 +1,25 @@
 :root {
-    --cor-primaria: #007bff;
+    --cor-primaria: #3a925f;
+    --cor-secundaria: #ffd828;
+    --cor-fundo: rgb(22, 22, 22);
+    --cor-campo: rgb(38, 38, 38);
 }
 
 body {
-    background-color: rgb(22, 22, 22);
+    background-color: var(--cor-fundo);
     color: white;
 }
 
 span {
-    color: var(--cor-primaria)
+    color: var(--cor-secundaria);
+}
+
+.navbar {
+    background-color: var(--cor-primaria);
 }
 
 .card {
-    background-color: rgb(38, 38, 38);
+    background-color: var(--cor-campo);
     color: white;
 }
 
@@ -20,4 +27,49 @@ span {
     height: 300px;
     object-fit: cover;
     width: 100%;
+}
+
+.btn-outline-secondary {
+    color: var(--cor-primaria);
+    font-weight: bold;
+}
+
+.list-group-item {
+    background-color: var(--cor-campo);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--cor-fundo);
+    border-color: var(--cor-primaria);
+    color: var(--cor-primaria);
+    font-weight: bold;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--cor-campo);
+  color: white;
+  border: 1px solid var(--cor-campo);
+}
+
+.form-control::placeholder {
+  color: #7a7a7a;
+  opacity: 1;
+}
+
+.form-label {
+  color: white;
+}
+
+.btn-primary {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+    
+}
+
+.btn-primary:hover {
+    background-color: var(--cor-secundaria);
+    border-color: var(--cor-secundaria);
+    color: black;
 }
