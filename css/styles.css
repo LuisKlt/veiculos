@@ -1,5 +1,5 @@
 :root {
-    --cor-primaria: #3a925f;
+    --cor-primaria: #2d55c4;
     --cor-secundaria: #ffd828;
     --cor-fundo: rgb(22, 22, 22);
     --cor-campo: rgb(38, 38, 38);
@@ -22,6 +22,11 @@ span {
     background-color: var(--cor-campo);
     color: white;
 }
+
+.card-body {
+    background-color: var(--cor-fundo);
+}
+
 
 .img-thumb {
     height: 300px;
