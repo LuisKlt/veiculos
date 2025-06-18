@@ -23,7 +23,7 @@ span {
     color: white;
 }
 
-.card-body {
+.tela-login .card {
     background-color: var(--cor-fundo);
 }
 
